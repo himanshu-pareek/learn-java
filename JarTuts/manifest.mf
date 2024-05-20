@@ -1,0 +1,3 @@
+Main-Class: TicTacToe
+Class-Path: player.jar
+

@@ -1,0 +1,3 @@
+#Persistable Echo
+#Tue Apr 23 13:04:23 IST 2024
+persistance_echo=d 4 duck

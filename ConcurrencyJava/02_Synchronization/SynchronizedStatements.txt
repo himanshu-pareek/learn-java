@@ -1,0 +1,28 @@
+public void addName (String name) {
+  synchronized (this) {
+    this.lastName = name;
+    this.nameCount++;
+  }
+  nameList.add (name);
+}
+
+public class MsLunch {
+  private long c1 = 0;
+  private long c2 = 0;
+  private Object lockC1 = new Object();
+  private Object lockC2 = new Object();
+
+  public void inc1() {
+    synchronized (lockC1) {
+      this.c1++;
+    }
+  }
+
+  public void inc2() {
+    synchronized (lockC2) {
+      this.c2++;
+    }
+  }
+}
+
+

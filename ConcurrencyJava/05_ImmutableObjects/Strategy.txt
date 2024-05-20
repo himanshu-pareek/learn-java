@@ -1,0 +1,11 @@
+Some rules:
+
+1. Don't provide "setter" methods.
+2. Make all fields final and private.
+3. Don't allow subclasses to override methods.
+  A. Simplest way - Declare class as final
+  B. More sofisticated way - private constructor & factory methods to create instances
+4. If the instance fields include reference to mutable objects, don't allow those objects to be changes:
+  4.1. Don't provide methods that modify the mutable objects
+  4.2. Don't share references to the mutable objects
+

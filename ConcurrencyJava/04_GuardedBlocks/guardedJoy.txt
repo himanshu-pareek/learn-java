@@ -1,0 +1,33 @@
+Scenario - `guardedJoy` is a method that must not proceed until another thread sets the value of `joy` to TRUE.
+
+// Normal instince
+void guardedJoy() {
+  // Don't ever do this
+  // Wastes processor time
+  while (!joy);
+  System.out.println ("Joy has been achieved.");
+}
+
+// Efficient way
+synchronized void guardefJoy() {
+  // This loops through each special event,
+  // which may not be the event we want
+  // So, need to check each time
+  while (!joy) {
+    try {
+      wait();
+    } catch (InterruptedException e) {}
+  }
+  System.out.println ("Joy has been achieved.");
+}
+
+Why is guardedJoy Synchronized?
+If `d` is the object, we are using to invoke `wait`. When a thread invokes `d.wait`, it must own the intrinsic lock for `d`.
+
+When `wait` is invoked, the thread releases the lock and suspends execution. At some future time, another thread will acquire the same lock and invoke `Object.notifyAll`, informing all threads waiting on that lock that something important has happened.
+
+public synchronized notifyJoy() {
+  joy = true;
+  notifyAll();
+}
+
