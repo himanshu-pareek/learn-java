@@ -1,0 +1,3 @@
+javac InternationalizedMortgageCalculator.java || exit 1
+java InternationalizedMortgageCalculator
+
