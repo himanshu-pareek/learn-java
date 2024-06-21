@@ -51,5 +51,28 @@ Now, send the signed JAR file (probably Test/sCount.jar file) and Public Key Cer
 
 ## Steps for the Code Receiver
 
+**Ray** is the one, who receives the *Signed* JAR file along with Public Key Certificate. The JAR file contains class `Count.class`, which requests access to System Resources on system that it normally would not have permission to access.
 
+1. Observe the restricted application. This application would not be able to access system resources until we import Susan's certificate and create a policy file.
+2. Import Susan's certificate as a trusted certificate using `keytool -import` command.
+3. Setup a policy file to grant permission.
+4. Test reconfigured **Count** application.
+
+### Observe the Restricted Application
+
+An application can be run under a security manager by invoking the interpreter with the `-Djava.security.manager` command-line argument. But, what if the application to be invoked resides inside a JAR file?
+
+Use `-cp` to specify a search path for application classes and resources.
+
+Run script `receiver1.sh` to run the application - first without security manage, then with scurity manager.
+
+### Import the Certificate as a Trusted Certificate
+
+We have received signed JAR file (`sCount.jar`) and Public Key Certificate (`Example.cer`) from **Susan**.
+
+1. Create keystore for **Ray** with name `exampleraystore`.
+
+2. Import the Susan's certificate into the keystore.
+
+Run script `receiver2.sh` to do the above
 
