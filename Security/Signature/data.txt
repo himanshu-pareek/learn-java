@@ -1,0 +1,2 @@
+This is a sample input to the sign the file program.
+I hope this works.
