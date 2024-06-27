@@ -16,7 +16,9 @@ public class SignFile {
 
 		if (args.length < 1) {
 
-			System.out.println ("Usage: SignFile <file name>");
+			System.out.println ("Usage:\n\t- SignFile <file name>");
+      System.out.println ("\t- SignFile <file name> <file to store signature>");
+      System.out.println ("\t- SignFile <file name> <file to store signature> <file to store public key>");
 			System.exit (1);
 
 		}
