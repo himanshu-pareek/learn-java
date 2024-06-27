@@ -14,7 +14,7 @@ public class SignFile {
 
 	public static void main (String[] args) throws Exception {
 
-		if (args.length != 1) {
+		if (args.length < 1) {
 
 			System.out.println ("Usage: SignFile <file name>");
 			System.exit (1);
@@ -22,7 +22,18 @@ public class SignFile {
 		}
 
 		String fileName = args[0];
-		System.out.println ("File to sign - " + fileName);
+    String sigFileName = "sig";
+    String pubKeyFileName = "pubkey";
+    if (args.length >= 2) {
+      sigFileName = args[1];
+    }
+    if (args.length >= 3) {
+      pubKeyFileName = args[2];
+    }
+		System.out.printf ("\n\tFile to sign - %s\n", fileName);
+    System.out.printf ("\tSignature will be stored in - %s\n", sigFileName);
+    System.out.printf ("\tPublic key will be stored in - %s\n\n", pubKeyFileName);
+
 
 		// 1. Generate Private and Public key
 		System.out.println ("⏳Generating private - public key pair...");
@@ -37,15 +48,34 @@ public class SignFile {
 		System.out.println ("✅Initialized.\n");
 
 		// 3. Supply the file data to the signature
-		System.out.println ("Supplying the data from the file to the signature...");
+		System.out.println ("⏳Supplying the data from the file to the signature...");
 		updateSignature (signature, fileName);
-		System.out.println ("Supplied.\n");
+		System.out.println ("✅Supplied.\n");
 
 		// 4. Generate the signature
-		System.out.println ("Signing the data...");
+		System.out.println ("⏳Signing the data...");
 		byte[] sign = signature.sign();
-		System.out.println ("Signed");
+		System.out.println ("✅Signed.\n");
+
+    // 5. Store the signature in a file
+    System.out.printf ("⏳Storing signature in %s...\n", sigFileName);
+    writeToFile (sign, sigFileName);
+    System.out.println ("✅Stored.\n");
+
+    // 6. Store the public key in a file
+    System.out.printf ("⏳Storing public key in %s...\n", pubKeyFileName);
+    writeToFile (publicKey.getEncoded(), pubKeyFileName);
+    System.out.println ("✅Stored.\n");
 	}
+
+  private static void writeToFile (byte[] data, String fileName) throws Exception {
+
+    try (FileOutputStream out = new FileOutputStream (fileName)) {
+
+      out.write (data);
+
+    } catch (Exception e) { throw e; }
+  }
 
 	private static void updateSignature (Signature signature, String fileName) throws Exception {
 
