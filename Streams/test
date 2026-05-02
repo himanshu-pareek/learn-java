@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+rm *.class || true
+javac -Xlint:unchecked MyStreamTest.java
+java -ea MyStreamTest
+rm *.class
