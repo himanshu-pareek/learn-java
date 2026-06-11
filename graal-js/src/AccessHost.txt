@@ -1,0 +1,25 @@
+import org.graalvm.polyglot.*;
+import java.util.function.Supplier;
+import java.util.concurrent.Callable;
+
+public class AccessHost {
+  public static void main(String[] args) {
+    try (Context context = Context.newBuilder().allowAllAccess(true).build()) {
+      context.getBindings("js").putMember("javaObj", new MyClass());
+      boolean valid = context.eval("js", """
+          javaObj.id == 42 && javaObj.text == "43" && javaObj.arr.length == 5
+          && javaObj.arr[4] == 44 && javaObj.ret45() == 45
+          """).asBoolean();
+      System.out.println("valid? " + valid);
+      assert valid;
+    }
+  }
+}
+
+class MyClass {
+  public int id = 42;
+  public String text = "43";
+  public int[] arr = new int[] { 1, 2, 3, 4, 44 };
+  public Callable<Integer> ret45 = () -> 45;
+}
+

@@ -1,0 +1,29 @@
+import java.util.function.Supplier;
+import org.graalvm.polyglot.*;
+
+public class AccessHost2 {
+  public static class MyClass {
+    public int               id    = 42;
+    public String            text  = "42";
+    public int[]             arr   = new int[]{1, 42, 3};
+    public Supplier<Integer> ret42 = () -> 42;
+  }
+
+  public static void main(String[] args) {
+    try (Context context = Context.newBuilder()
+        .allowAllAccess(true)
+        .build()) {
+      context.getBindings("js").putMember("javaObj", new MyClass());
+      boolean valid = context.eval("js",
+          " console.log(javaObj.id);   javaObj.id         == 42"          +
+          " && javaObj.text       == '42'"        +
+          " && javaObj.arr[1]     == 42"          +
+          " && javaObj.ret42()    == 42")
+        .asBoolean();
+      assert valid == true;
+        }
+  }
+
+}
+
+
