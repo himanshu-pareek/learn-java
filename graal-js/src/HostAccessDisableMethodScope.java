@@ -5,6 +5,8 @@ public class HostAccessDisableMethodScope {
 	Value result;
 	Value metadata;
 
+	@HostAccess.Export
+	// @HostAccess.DisableMethodScope
 	public void callback(Value result, Value metadata) {
 	    this.result = result;
 	    this.metadata = metadata;
@@ -16,4 +18,12 @@ public class HostAccessDisableMethodScope {
     }
 
     public static void main(String[] args) {
+	Service s = new Service();
+	try (Context context = Context.newBuilder().allowHostAccess(HostAccess.SCOPED).build()) {
+	    context.getBindings("js").putMember("services", s);
+	    context.eval("js", "services.callback('Hello from JS', 'foobar');");
+	    System.out.println(s.getResult());
+	}
+    }
+}
 	
