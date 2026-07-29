@@ -1,3 +1,6 @@
+import java.nio.file.Path;
+import java.nio.file.Files;
+
 void main() {
     {
         record City(String name, int population) {
@@ -158,4 +161,44 @@ void main() {
                         .toList();
         IO.println("result = " + result);
     }
+
+    {
+	    Iterator<Integer> iterator = new Iterator<>() {
+		    private int index = 0;
+		    public boolean hasNext() {
+			    return index < 10;
+		    }
+		    public Integer next() {
+			    return ++index;
+		    }
+	    };
+
+	    long estimateSize = 10L;
+	    int characteristics = 0;
+	    Spliterator<Integer> spliterator = Spliterators.spliterator(iterator, estimateSize, characteristics);
+
+	    boolean parallel = false;
+	    Stream<Integer> stream = StreamSupport.stream(spliterator, parallel);
+
+	    List<Integer> ints = stream.map(x -> x * 2).toList();
+	    IO.println("ints = " + ints);
+    }
+
+    {
+	    Stream<String> iterated = Stream.iterate("+", s -> s.length() <= 5, s -> s + "+");
+	    iterated.forEach(IO::println);
+    }
+
+    {
+	    // Print the number of left curly parenthesis ({) in this file
+	    Path file = Path.of("StreamsDemo.java");
+	    try (Stream<String> lines = Files.lines(file)) {
+		    long count = lines.flatMap(line -> line.chars().mapToObj(Character::toString))
+			    .filter(c -> c.equals("{"))
+			    .count();
+		    IO.println("Number of left curly paren ({): " + count);
+	    } catch (IOException e) {
+		    e.printStackTrace();
+	    }
+	}
 }
